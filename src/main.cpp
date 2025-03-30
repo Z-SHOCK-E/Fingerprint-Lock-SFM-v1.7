@@ -1,11 +1,13 @@
 #include <Arduino.h>
 #include <sfm.hpp>
+
 #define SFM_RX 19
 #define SFM_TX 18
 #define SFM_IRQ 5
 #define SFM_VCC 15
 
 #define lockPin 21 
+
 int lockOpenTime = 2000; // Adjust as needed
 
 SFM_Module SFM(SFM_VCC, SFM_IRQ, SFM_TX, SFM_RX);
