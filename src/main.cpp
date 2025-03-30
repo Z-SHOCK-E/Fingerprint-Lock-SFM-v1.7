@@ -100,7 +100,6 @@ void setup() {
     Serial.println("Did not find fingerprint sensor :(");
     while (1) { delay(1); } // Loops until fingerprint sensor is found. Prevents entering the loop if the sensor isn't found
   }
-  //return(0);
   //delay(1000);
 }
 
