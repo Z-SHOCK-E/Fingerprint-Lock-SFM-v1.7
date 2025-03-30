@@ -5,6 +5,8 @@
 #define SFM_IRQ 5
 #define SFM_VCC 15
 
+#define lockPin 21 
+int lockOpenTime = 2000; // Adjust as needed
 
 SFM_Module SFM(SFM_VCC, SFM_IRQ, SFM_TX, SFM_RX);
 
@@ -19,6 +21,13 @@ void sfmPinInt1() {
 uint8_t temp = 0; // used to get recognition return
 uint16_t tempUid = 0; // used to get recognized uid
 
+void unlock(){
+  digitalWrite(lockPin, HIGH);
+  Serial.println("Lock is opened....");
+  delay(lockOpenTime);
+  digitalWrite(lockPin, LOW); 
+  Serial.println("Lock is closed....");
+}
 
 void enroll() {
   // Enroll fingerprints
@@ -65,10 +74,12 @@ void enroll() {
 }
 
 void setup() {
+  pinMode(lockPin, OUTPUT);
   SFM.setPinInterrupt(sfmPinInt1); // must perform this step in setup() to attach the inner interrupt.
   Serial.begin(115200); // not affiliated with module
   Serial.println("Init.......");
   SFM.enable();
+  delay(200);
   SFM.setRingColor(SFM_RING_OFF);
   fingerprints = SFM.getUserCount();
   if (SFM.isConnected()) {
@@ -146,10 +157,11 @@ uint8_t lockLoop() {
 
       if (tempUid != 0) {
         SFM.setRingColor(SFM_RING_GREEN);
-        delay(200);
         Serial.printf("\nSuccessfully matched with UID: %d\n", tempUid);
+        unlock();
         if (tempUid > 1){
           Serial.println("User finger...");
+          //unlock();
           while(SFM.isTouched()){
             delay(1000);
             touchHold += 1;
@@ -171,6 +183,7 @@ uint8_t lockLoop() {
         }
         if (tempUid == 1){
           Serial.println("Admin finger...");
+          //unlock();
           while(SFM.isTouched()){
             delay(1000);
             touchHold += 1;
@@ -214,7 +227,7 @@ uint8_t lockLoop() {
       delay(300);
     }
   }
-  return 0;  // Return 0 if no valid fingerprint is recognized
+  return 0; 
 }
 
 void loop() {
