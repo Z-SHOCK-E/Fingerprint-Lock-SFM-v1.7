@@ -6,7 +6,7 @@
 #define SFM_IRQ 5
 #define SFM_VCC 15
 
-#define lockPin 21 
+#define lockPin 21 // Mosfet / Relay pin
 
 int lockOpenTime = 2000; // Adjust as needed
 
@@ -14,13 +14,13 @@ SFM_Module SFM(SFM_VCC, SFM_IRQ, SFM_TX, SFM_RX);
 
 uint8_t fingerprints = 0; // Used to store the number of templates in the sensor
 bool lastTouchState = 0; 
-int touchHold = 0;  // Used touch and hold menu system
+int touchHold = 0;       // Used for the touch and hold menu system
 
 void sfmPinInt1() {
   SFM.pinInterrupt();
 }
 
-uint8_t temp = 0; // used to get recognition return
+uint8_t temp = 0;     // used to get recognition return
 uint16_t tempUid = 0; // used to get recognized uid
 
 void unlock(){
